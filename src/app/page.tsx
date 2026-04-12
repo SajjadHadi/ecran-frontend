@@ -242,8 +242,7 @@ function GenreRow({ genre }: { genre: string }) {
       {/* Left arrow */}
       <button
         onClick={() => scroll("left")}
-        className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-background/80 border border-border/50 backdrop-blur-sm flex items-center justify-center shadow-lg opacity-0 group-hover/row:opacity-100 transition-opacity duration-200 -translate-x-2 group-hover/row:translate-x-0 disabled:opacity-0 disabled:pointer-events-none`}
-        style={{ left: "-16px" }}
+        className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-background/80 border border-border/50 backdrop-blur-sm flex items-center justify-center shadow-lg opacity-0 group-hover/row:opacity-100 transition-opacity duration-200 disabled:opacity-0 disabled:pointer-events-none`}
       >
         <ChevronLeftIcon className="h-5 w-5" />
       </button>
@@ -293,8 +292,7 @@ function GenreRow({ genre }: { genre: string }) {
       {/* Right arrow */}
       <button
         onClick={() => scroll("right")}
-        className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-background/80 border border-border/50 backdrop-blur-sm flex items-center justify-center shadow-lg opacity-0 group-hover/row:opacity-100 transition-opacity duration-200 translate-x-2 group-hover/row:translate-x-0 disabled:opacity-0 disabled:pointer-events-none`}
-        style={{ right: "-16px" }}
+        className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-background/80 border border-border/50 backdrop-blur-sm flex items-center justify-center shadow-lg opacity-0 group-hover/row:opacity-100 transition-opacity duration-200 disabled:opacity-0 disabled:pointer-events-none`}
       >
         <ChevronRightIcon className="h-5 w-5" />
       </button>
@@ -304,9 +302,9 @@ function GenreRow({ genre }: { genre: string }) {
 
 function GenreCarousel() {
   return (
-    <section className="py-16 space-y-10">
-      <div className="container mx-auto px-4">
-        <div className="flex items-end justify-between mb-6">
+    <section className="py-16 overflow-hidden">
+      <div className="container mx-auto px-4 mb-6">
+        <div className="flex items-end justify-between">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
             Browse by <span className="text-primary">genre</span>
           </h2>
