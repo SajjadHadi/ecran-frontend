@@ -6,7 +6,7 @@ export function useSession() {
   return useQuery({
     queryKey: ["session"],
     queryFn: async () => {
-      const response = await api.get<ApiResponse<Session>>("/auth/session");
+      const response = await api.get<ApiResponse<Session>>("/auth/get-session");
       return response.data;
     },
     retry: false,
@@ -17,7 +17,7 @@ export function useSignIn() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (credentials: { email: string; password: string }) => {
-      const response = await api.post<ApiResponse<User>>("/auth/sign-in/credentials", { email: credentials.email, password: credentials.password, callbackURL: "/", redirect: false });
+      const response = await api.post<ApiResponse<User>>("/auth/sign-in/email", { email: credentials.email, password: credentials.password });
       return response.data;
     },
     onSuccess: () => {
@@ -30,7 +30,7 @@ export function useSignUp() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (credentials: { email: string; password: string; name?: string }) => {
-      const response = await api.post<ApiResponse<User>>("/auth/sign-up", { email: credentials.email, password: credentials.password, name: credentials.name });
+      const response = await api.post<ApiResponse<User>>("/auth/sign-up/email", { email: credentials.email, password: credentials.password, name: credentials.name });
       return response.data;
     },
     onSuccess: () => {
