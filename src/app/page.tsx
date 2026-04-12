@@ -7,8 +7,7 @@ import { Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Accordion } from "@/components/ui/accordion";
 import { ShowCard } from "@/components/show-card";
-import { useFeaturedShows, useTrendingShows } from "@/features/shows/hooks";
-import { useGenres } from "@/features/shows/hooks";
+import { useFeaturedShows, useTrendingShows, useShows } from "@/features/shows/hooks";
 
 // ─── Stats Counter ───────────────────────────────────────────────────────────
 
@@ -195,45 +194,98 @@ function StaffPicks() {
   );
 }
 
-// ─── Genre Categories ────────────────────────────────────────────────────────
+// ─── Genre Carousel ──────────────────────────────────────────────────────────
 
-const genres = [
-  { name: "Drama", icon: DramaIcon },
-  { name: "Comedy", icon: ComedyIcon },
-  { name: "Action", icon: ActionIcon },
-  { name: "Thriller", icon: ThrillerIcon },
-  { name: "Sci-Fi", icon: SciFiIcon },
-  { name: "Romance", icon: RomanceIcon },
-  { name: "Horror", icon: HorrorIcon },
-  { name: "Documentary", icon: DocumentaryIcon },
+const carouselGenres = [
+  "Drama", "Comedy", "Action", "Thriller", "Sci-Fi", "Romance", "Horror", "Mystery", "Documentary",
 ];
 
-function GenreCategories() {
+function GenreRow({ genre }: { genre: string }) {
+  const { data, isLoading } = useShows(undefined, genre);
+
+  if (isLoading) {
+    return (
+      <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="flex-shrink-0 w-36">
+            <div className="aspect-[2/3] rounded-lg bg-muted animate-pulse" />
+            <div className="mt-2 h-3 bg-muted rounded w-3/4 animate-pulse" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  const shows = data?.data ?? [];
+
   return (
-    <section className="py-24 bg-card/20 border-y border-border/50">
+    <div className="relative group">
+      <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide scroll-smooth">
+        {shows.slice(0, 12).map((show) => (
+          <Link
+            key={show.id}
+            href={`/shows/${show.id}`}
+            className="flex-shrink-0 w-36 md:w-40 transition-transform duration-200 hover:scale-105 hover:z-10"
+          >
+            <div className="relative aspect-[2/3] rounded-lg overflow-hidden bg-muted">
+              {show.image ? (
+                <Image
+                  src={show.image}
+                  alt={show.name}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center">
+                  <FilmIcon className="h-8 w-8 opacity-30" />
+                </div>
+              )}
+              {show.rating && (
+                <div className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-xs font-medium backdrop-blur-sm">
+                  <StarIcon className="h-3 w-3 text-primary fill-primary" />
+                  {show.rating.toFixed(1)}
+                </div>
+              )}
+            </div>
+            <div className="mt-2">
+              <h3 className="font-medium text-sm line-clamp-1">{show.name}</h3>
+              <p className="text-xs text-muted-foreground line-clamp-1">
+                {show.genres[0]}
+              </p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GenreCarousel() {
+  return (
+    <section className="py-16 space-y-10">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+        <div className="flex items-end justify-between mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
             Browse by <span className="text-primary">genre</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
-            Find your next obsession by category.
-          </p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
-          {genres.map((g, i) => (
-            <Link
-              key={i}
-              href={`/shows?genre=${encodeURIComponent(g.name)}`}
-              className="group flex flex-col items-center gap-3 p-6 rounded-2xl bg-card border border-border/50 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200"
-            >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-200">
-                <g.icon className="h-6 w-6 text-primary" />
-              </div>
-              <span className="font-medium text-sm">{g.name}</span>
-            </Link>
-          ))}
-        </div>
+      </div>
+
+      <div className="space-y-10">
+        {carouselGenres.map((genre) => (
+          <div key={genre} className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-lg">{genre}</h3>
+              <Link
+                href={`/shows?genre=${encodeURIComponent(genre)}`}
+                className="text-sm text-primary hover:underline font-medium"
+              >
+                View all →
+              </Link>
+            </div>
+            <GenreRow genre={genre} />
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -698,7 +750,7 @@ export default function Home() {
         <FeaturesGrid />
         <HowItWorks />
         <StaffPicks />
-        <GenreCategories />
+        <GenreCarousel />
         <Testimonials />
         <FAQSection />
         <NewsletterSection />
