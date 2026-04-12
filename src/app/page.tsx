@@ -202,10 +202,29 @@ const carouselGenres = [
 
 function GenreRow({ genre }: { genre: string }) {
   const { data, isLoading } = useShows(undefined, genre);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    setShowLeftArrow(scrollLeft > 0);
+    setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 8);
+  };
+
+  const scroll = (dir: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const scrollAmount = scrollRef.current.clientWidth * 0.6;
+    scrollRef.current.scrollBy({
+      left: dir === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
 
   if (isLoading) {
     return (
-      <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+      <div className="flex gap-3">
         {[...Array(6)].map((_, i) => (
           <div key={i} className="flex-shrink-0 w-36">
             <div className="aspect-[2/3] rounded-lg bg-muted animate-pulse" />
@@ -219,8 +238,22 @@ function GenreRow({ genre }: { genre: string }) {
   const shows = data?.data ?? [];
 
   return (
-    <div className="relative group">
-      <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide scroll-smooth">
+    <div className="relative group/row">
+      {/* Left arrow */}
+      <button
+        onClick={() => scroll("left")}
+        className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-background/80 border border-border/50 backdrop-blur-sm flex items-center justify-center shadow-lg opacity-0 group-hover/row:opacity-100 transition-opacity duration-200 -translate-x-2 group-hover/row:translate-x-0 disabled:opacity-0 disabled:pointer-events-none`}
+        style={{ left: "-16px" }}
+      >
+        <ChevronLeftIcon className="h-5 w-5" />
+      </button>
+
+      {/* Scrollable content */}
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex gap-3 overflow-x-hidden scroll-smooth"
+      >
         {shows.slice(0, 12).map((show) => (
           <Link
             key={show.id}
@@ -256,6 +289,15 @@ function GenreRow({ genre }: { genre: string }) {
           </Link>
         ))}
       </div>
+
+      {/* Right arrow */}
+      <button
+        onClick={() => scroll("right")}
+        className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-background/80 border border-border/50 backdrop-blur-sm flex items-center justify-center shadow-lg opacity-0 group-hover/row:opacity-100 transition-opacity duration-200 translate-x-2 group-hover/row:translate-x-0 disabled:opacity-0 disabled:pointer-events-none`}
+        style={{ right: "-16px" }}
+      >
+        <ChevronRightIcon className="h-5 w-5" />
+      </button>
     </div>
   );
 }
@@ -869,6 +911,40 @@ function ChevronDownIcon({ className }: { className?: string }) {
       className={className}
     >
       <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+function ChevronLeftIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  );
+}
+
+function ChevronRightIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m9 18 6-6-6-6" />
     </svg>
   );
 }
