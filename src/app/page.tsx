@@ -399,33 +399,142 @@ function NewsletterSection() {
 
 // ─── Mobile App CTA ────────────────────────────────────────────────────────────
 
+const mobileFeatures = [
+  {
+    icon: WifiIcon,
+    label: "Offline Sync",
+    description: "Take your watchlist offline",
+  },
+  {
+    icon: BellIcon,
+    label: "Push Alerts",
+    description: "Never miss a premiere",
+  },
+  {
+    icon: WidgetIcon,
+    label: "Home Widgets",
+    description: "Track at a glance",
+  },
+];
+
 function MobileAppCTA() {
   return (
-    <section className="py-24 bg-card/20 border-y border-border/50">
+    <section className="py-24 overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary/20 via-card to-card border border-border/50 p-10 md:p-16">
-          <div className="max-w-xl mx-auto text-center">
+        <div className="relative flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+          {/* Left: Feature callouts */}
+          <div className="flex-1 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-6">
               <SparklesIcon className="h-3 w-3" />
-              Coming Soon
+              Coming 2025
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-              Take Écran with you
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+              Écran in your
+              <br />
+              <span className="text-primary">pocket</span>
             </h2>
-            <p className="text-muted-foreground text-lg mb-8">
-              Native iOS and Android apps are on the way. Leave your email to be
-              first in line when we launch.
+            <p className="text-muted-foreground text-lg mb-10 max-w-md mx-auto lg:mx-0">
+              The full Écran experience, anywhere you go. Your watchlist, favorites,
+              and recommendations — always within reach.
             </p>
-            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 px-4 py-3 rounded-xl bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
-              />
-              <Button type="button" variant="outline" size="lg">
-                Notify Me
-              </Button>
-            </form>
+
+            <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
+              {mobileFeatures.map((f, i) => (
+                <div key={i} className="flex items-center gap-4 group">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-200">
+                    <f.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium text-sm">{f.label}</div>
+                    <div className="text-xs text-muted-foreground">{f.description}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* App store badges */}
+            <div className="flex items-center gap-4 mt-10 justify-center lg:justify-start">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border/50 text-muted-foreground text-xs font-medium opacity-60 cursor-not-allowed">
+                <AppleIcon className="h-5 w-5" />
+                App Store
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border/50 text-muted-foreground text-xs font-medium opacity-60 cursor-not-allowed">
+                <GooglePlayIcon className="h-5 w-5" />
+                Google Play
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Animated phone mockup */}
+          <div className="relative flex-shrink-0">
+            {/* Glow behind phone */}
+            <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-75" />
+
+            {/* Phone frame */}
+            <div className="relative animate-float-slow">
+              <div className="w-64 h-[520px] rounded-[3rem] bg-card border-2 border-border shadow-2xl shadow-primary/20 overflow-hidden">
+                {/* Status bar */}
+                <div className="h-12 bg-card border-b border-border/50 flex items-center justify-center">
+                  <div className="w-20 h-6 rounded-full bg-foreground/10" />
+                </div>
+                {/* App content preview */}
+                <div className="p-4 space-y-3">
+                  {/* Header */}
+                  <div className="flex items-center justify-between px-2">
+                    <div className="text-xs font-bold">Écran</div>
+                    <div className="w-4 h-4 rounded-full bg-primary/20" />
+                  </div>
+                  {/* Show row */}
+                  <div className="flex gap-3 px-2 py-2">
+                    <div className="w-14 h-20 rounded-lg bg-muted overflow-hidden flex-shrink-0">
+                      <div className="w-full h-full bg-gradient-to-br from-primary/30 to-primary/10" />
+                    </div>
+                    <div className="flex-1 py-1 space-y-2">
+                      <div className="h-3 bg-foreground/10 rounded w-3/4" />
+                      <div className="h-2 bg-foreground/5 rounded w-1/2" />
+                      <div className="h-2 bg-foreground/5 rounded w-2/3" />
+                    </div>
+                  </div>
+                  {/* Show row */}
+                  <div className="flex gap-3 px-2 py-2">
+                    <div className="w-14 h-20 rounded-lg bg-muted overflow-hidden flex-shrink-0">
+                      <div className="w-full h-full bg-gradient-to-br from-purple-500/30 to-purple-500/10" />
+                    </div>
+                    <div className="flex-1 py-1 space-y-2">
+                      <div className="h-3 bg-foreground/10 rounded w-2/3" />
+                      <div className="h-2 bg-foreground/5 rounded w-1/3" />
+                      <div className="h-2 bg-foreground/5 rounded w-1/2" />
+                    </div>
+                  </div>
+                  {/* Show row */}
+                  <div className="flex gap-3 px-2 py-2">
+                    <div className="w-14 h-20 rounded-lg bg-muted overflow-hidden flex-shrink-0">
+                      <div className="w-full h-full bg-gradient-to-br from-blue-500/30 to-blue-500/10" />
+                    </div>
+                    <div className="flex-1 py-1 space-y-2">
+                      <div className="h-3 bg-foreground/10 rounded w-4/5" />
+                      <div className="h-2 bg-foreground/5 rounded w-1/2" />
+                      <div className="h-2 bg-foreground/5 rounded w-3/4" />
+                    </div>
+                  </div>
+                  {/* Bottom nav */}
+                  <div className="absolute bottom-4 left-4 right-4 h-10 rounded-xl bg-foreground/5 border border-foreground/10 flex items-center justify-around">
+                    <div className="w-4 h-4 rounded-sm bg-primary/40" />
+                    <div className="w-4 h-4 rounded-sm bg-foreground/10" />
+                    <div className="w-4 h-4 rounded-sm bg-foreground/10" />
+                    <div className="w-4 h-4 rounded-sm bg-foreground/10" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating feature pills */}
+              <div className="absolute -top-4 -right-8 px-3 py-1.5 rounded-full bg-card border border-border/50 shadow-lg animate-float-delayed text-xs font-medium">
+                <span className="text-primary">●</span> Live sync
+              </div>
+              <div className="absolute -bottom-2 -left-10 px-3 py-1.5 rounded-full bg-card border border-border/50 shadow-lg animate-float text-xs font-medium">
+                <span className="text-primary">★</span> Staff picks
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -929,6 +1038,44 @@ function DocumentaryIcon({ className }: { className?: string }) {
       <path d="M2 3h20" />
       <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" />
       <path d="m7 21 5-5 5 5" />
+    </svg>
+  );
+}
+
+function WifiIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M12 20h.01" />
+      <path d="M2 8.82a15 15 0 0 1 20 0" />
+      <path d="M5 12.859a10 10 0 0 1 14 0" />
+      <path d="M8.5 16.429a5 5 0 0 1 7 0" />
+    </svg>
+  );
+}
+
+function WidgetIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+    </svg>
+  );
+}
+
+function AppleIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34-.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31-.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+    </svg>
+  );
+}
+
+function GooglePlayIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.802 8.99l-2.302 2.302-8.636-8.634z" />
     </svg>
   );
 }
