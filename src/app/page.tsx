@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Accordion } from "@/components/ui/accordion";
-import { ShowCard } from "@/components/show-card";
+import { ShowCard } from "@/components/shows";
 import { useFeaturedShows, useTrendingShows, useShows } from "@/features/shows/hooks";
 
 // ─── Stats Counter ───────────────────────────────────────────────────────────

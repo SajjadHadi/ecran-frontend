@@ -2,8 +2,8 @@
 
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Navbar } from "@/components/navbar";
-import { ShowCard } from "@/components/show-card";
+import { Navbar } from "@/components/layout";
+import { ShowCard } from "@/components/shows";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useShows, useGenres } from "@/features/shows/hooks";

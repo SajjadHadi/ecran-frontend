@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/navbar";
-import { ShowCard } from "@/components/show-card";
+import { Navbar } from "@/components/layout";
+import { ShowCard } from "@/components/shows";
 import { Button } from "@/components/ui/button";
 import { useWatchlist, useUpdateWatchlistItem, useRemoveFromWatchlist } from "@/features/watchlist/hooks";
 import { useSession } from "@/features/auth/hooks";
