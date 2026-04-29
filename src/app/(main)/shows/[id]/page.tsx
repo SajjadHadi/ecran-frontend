@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Navbar } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useShow } from "@/features/shows/hooks";
 import { useAddToWatchlist } from "@/features/watchlist/hooks";
 import { useAddFavoriteItem, useFavoriteLists } from "@/features/favorites/hooks";
@@ -56,121 +55,167 @@ export default function ShowDetailPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-1 container mx-auto py-8 px-4">
-        <div className="grid md:grid-cols-[280px_1fr] gap-8">
-          {/* Poster */}
-          <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-muted shadow-2xl shadow-primary/5">
-            {show.image ? (
-              <Image src={show.image} alt={show.name} fill className="object-cover" priority />
-            ) : (
-              <div className="flex h-full items-center justify-center bg-muted text-muted-foreground">
-                <FilmIcon className="h-16 w-16 opacity-30" />
-              </div>
+      <main className="flex-1">
+        {/* Hero Section */}
+        <div className="relative h-[65vh] min-h-[480px]">
+          <div className="absolute inset-0">
+            {show.image && (
+              <>
+                <Image src={show.image} alt={show.name} fill className="object-cover object-top opacity-30" priority />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
+                <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-transparent" />
+              </>
             )}
           </div>
-
-          {/* Details */}
-          <div className="space-y-6">
-            {/* Title & Meta */}
-            <div>
-              <h1 className="text-4xl font-bold tracking-tight">{show.name}</h1>
-              <div className="flex flex-wrap items-center gap-3 mt-3 text-sm text-muted-foreground">
-                {show.rating && (
-                  <span className="flex items-center gap-1 text-primary font-medium">
-                    <StarIcon className="h-4 w-4 fill-primary" />
-                    {show.rating.toFixed(1)}
-                  </span>
-                )}
-                {show.premiered && (
-                  <span className="flex items-center gap-1">
-                    <CalendarIcon className="h-4 w-4" />
-                    {show.premiered.split("-")[0]}
-                  </span>
-                )}
-                {show.genres.slice(0, 3).map((g) => (
-                  <span key={g} className="px-2 py-1 bg-muted rounded-md text-xs font-medium">
-                    {g}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Summary */}
-            {show.summary && (
-              <div
-                className="text-muted-foreground leading-relaxed [&_p]:mb-3"
-                dangerouslySetInnerHTML={{ __html: show.summary }}
-              />
-            )}
-
-            {/* Actions for authenticated users */}
-            {session && (
-              <div className="space-y-4 pt-4 border-t border-border/50">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                  Quick Actions
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  <Button onClick={() => handleAddToWatchlist("watching")} size="sm" className="gap-2">
-                    <PlayIcon className="h-4 w-4" />
-                    Watching
-                  </Button>
-                  <Button variant="secondary" onClick={() => handleAddToWatchlist("want_to_watch")} size="sm" className="gap-2">
-                    <BookmarkIcon className="h-4 w-4" />
-                    Want to Watch
-                  </Button>
-                  <Button variant="secondary" onClick={() => handleAddToWatchlist("watched")} size="sm" className="gap-2">
-                    <CheckIcon className="h-4 w-4" />
-                    Watched
-                  </Button>
-                </div>
-
-                {lists && lists.length > 0 && (
-                  <div className="pt-2">
-                    <h4 className="text-sm font-medium mb-2">Add to Favorites</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {lists.map((list) => (
-                        <Button
-                          key={list.id}
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleAddToFavorites(list.id)}
-                          className="text-xs"
-                        >
-                          {list.name}
-                        </Button>
-                      ))}
-                    </div>
+          
+          <div className="container mx-auto px-4 h-full relative pt-8">
+            <div className="flex gap-8 h-full items-end pb-12">
+              <div className="relative w-56 aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl shadow-primary/20 flex-shrink-0 hidden md:block">
+                {show.image ? (
+                  <Image src={show.image} alt={show.name} fill className="object-cover" priority />
+                ) : (
+                  <div className="flex h-full items-center justify-center bg-muted">
+                    <FilmIcon className="h-16 w-16 opacity-30" />
                   </div>
                 )}
               </div>
-            )}
-
-            {/* Show Info Cards */}
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              {show.network && (
-                <Card className="bg-card/50 border-border/50">
-                  <CardContent className="pt-4">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+              
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-3 mb-4">
+                  {show.genres.slice(0, 3).map(g => (
+                    <span key={g} className="px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-xs font-medium text-primary">{g}</span>
+                  ))}
+                  {show.rating && (
+                    <span className="flex items-center gap-1 text-primary font-bold text-lg">
+                      <StarIcon className="h-5 w-5 fill-primary" />{show.rating.toFixed(1)}
+                    </span>
+                  )}
+                </div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">{show.name}</h1>
+                <div className="flex flex-wrap items-center gap-4 text-muted-foreground text-sm">
+                  {show.premiered && <span>{show.premiered.split("-")[0]}</span>}
+                  {show.network && <span>• {show.network.name}</span>}
+                  {show.status && <span>• {show.status}</span>}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Content Section */}
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid lg:grid-cols-[1fr_320px] gap-12">
+            {/* Main Content */}
+            <div className="space-y-8">
+              {/* Mobile Poster */}
+              <div className="relative aspect-[2/3] rounded-xl overflow-hidden md:hidden max-w-xs mx-auto">
+                {show.image ? (
+                  <Image src={show.image} alt={show.name} fill className="object-cover" />
+                ) : (
+                  <div className="flex h-full items-center justify-center bg-muted">
+                    <FilmIcon className="h-16 w-16 opacity-30" />
+                  </div>
+                )}
+              </div>
+              
+              {/* Summary */}
+              {show.summary && (
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Synopsis</h2>
+                  <div className="text-muted-foreground leading-relaxed [&_p]:mb-3" dangerouslySetInnerHTML={{ __html: show.summary }} />
+                </div>
+              )}
+              
+              {/* Show Info Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                {show.network && (
+                  <div className="p-4 rounded-xl bg-card/50 border border-border/50">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                       <TvIcon className="h-4 w-4" />
                       Network
                     </div>
                     <p className="font-semibold">{show.network.name}</p>
-                  </CardContent>
-                </Card>
-              )}
-              {show.schedule?.time && (
-                <Card className="bg-card/50 border-border/50">
-                  <CardContent className="pt-4">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                  </div>
+                )}
+                {show.schedule?.time && (
+                  <div className="p-4 rounded-xl bg-card/50 border border-border/50">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                       <ClockIcon className="h-4 w-4" />
                       Schedule
                     </div>
-                    <p className="font-semibold">
-                      {show.schedule.time} on {show.schedule.days.join(", ")}
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
+                    <p className="font-semibold">{show.schedule.time}</p>
+                    <p className="text-sm text-muted-foreground">{show.schedule.days.join(", ")}</p>
+                  </div>
+                )}
+                {show.language && (
+                  <div className="p-4 rounded-xl bg-card/50 border border-border/50">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                      <GlobeIcon className="h-4 w-4" />
+                      Language
+                    </div>
+                    <p className="font-semibold">{show.language}</p>
+                  </div>
+                )}
+                {show.status && (
+                  <div className="p-4 rounded-xl bg-card/50 border border-border/50">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                      <CircleIcon className="h-4 w-4" />
+                      Status
+                    </div>
+                    <p className="font-semibold">{show.status}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Actions Sidebar */}
+            <div className="space-y-6">
+              <div className="rounded-2xl bg-card/80 backdrop-blur border border-border/50 p-6 sticky top-24">
+                <h3 className="text-lg font-semibold mb-4">Track This Show</h3>
+                {session ? (
+                  <div className="space-y-3">
+                    <Button onClick={() => handleAddToWatchlist("watching")} className="w-full gap-2">
+                      <PlayIcon className="h-4 w-4" />
+                      Start Watching
+                    </Button>
+                    <Button variant="secondary" onClick={() => handleAddToWatchlist("want_to_watch")} className="w-full gap-2">
+                      <BookmarkIcon className="h-4 w-4" />
+                      Want to Watch
+                    </Button>
+                    <Button variant="secondary" onClick={() => handleAddToWatchlist("watched")} className="w-full gap-2">
+                      <CheckIcon className="h-4 w-4" />
+                      Watched
+                    </Button>
+                    
+                    {lists && lists.length > 0 && (
+                      <div className="pt-4 border-t border-border/50">
+                        <h4 className="text-sm font-medium mb-3">Add to Favorites</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {lists.map((list) => (
+                            <Button
+                              key={list.id}
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleAddToFavorites(list.id)}
+                            >
+                              {list.name}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <Button asChild className="w-full">
+                      <a href="/auth/signin">Sign In</a>
+                    </Button>
+                    <Button asChild variant="outline" className="w-full">
+                      <a href="/auth/signup">Create Account</a>
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -252,6 +297,24 @@ function ClockIcon({ className }: { className?: string }) {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <circle cx="12" cy="12" r="10" />
       <polyline points="12 6 12 12 16 14" />
+    </svg>
+  );
+}
+
+function GlobeIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="12" cy="12" r="10" />
+      <line x1="2" y1="12" x2="22" y2="12" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+  );
+}
+
+function CircleIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="12" cy="12" r="10" />
     </svg>
   );
 }
